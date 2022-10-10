@@ -1,0 +1,45 @@
+<style>
+  body {
+    font-size: 5rem;
+    font-family: sans-serif;
+  }
+
+  input {
+    margin-left: 1rem;
+    font-size: 5rem;
+    width: 100%;
+  }
+
+  .container {
+    display: flex;
+    margin-bottom: 5rem;
+  }
+</style>
+
+<div class="container">
+  <span>Puesto:</span>
+  <input
+    autofocus
+    onkeydown="handleKeyDown(event)"
+    oninput="handleInput(this)"
+  />
+</div>
+<span id="result"></span>
+
+<script>
+  const threshold = parseInt(window.location.search.slice(1)) / 2;
+  const result = document.querySelector("#result");
+
+  function handleKeyDown(event) {
+    if (event.key !== "Backspace" && Number.isNaN(parseInt(event.key))) {
+      event.preventDefault();
+    }
+  }
+
+  function handleInput({ value }) {
+    const position = parseInt(value);
+    const attack = position <= threshold ? position * 2 - 1 : position;
+
+    result.textContent = value && `Ataca al ${attack} y al ${attack + 1}`;
+  }
+</script>
