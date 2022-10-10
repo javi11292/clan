@@ -27,7 +27,8 @@
 <span id="result"></span>
 
 <script>
-  const threshold = parseInt(window.location.search.slice(1)) / 2;
+  const total = parseInt(window.location.search.slice(1));
+  const threshold = total / 2;
   const result = document.querySelector("#result");
 
   function handleKeyDown(event) {
@@ -38,8 +39,15 @@
 
   function handleInput({ value }) {
     const position = parseInt(value);
+
     const attack = position <= threshold ? position * 2 - 1 : position;
 
-    result.textContent = value && `Ataca al ${attack} y al ${attack + 1}`;
+    if (position > total) {
+      result.textContent = "";
+    } else if (position === total) {
+      result.textContent = value && `Ataca al ${attack - 1} y al ${attack}`;
+    } else {
+      result.textContent = value && `Ataca al ${attack} y al ${attack + 1}`;
+    }
   }
 </script>
