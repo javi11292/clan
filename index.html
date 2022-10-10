@@ -1,6 +1,7 @@
 <script>
   const total = parseInt(window.location.search.slice(1));
   const threshold = total / 2;
+  const ceil = Math.ceil(threshold);
 
   const result = document.createElement("span");
   result.className = "result";
@@ -13,8 +14,14 @@
 
   function handleInput({ value }) {
     const position = parseInt(value);
+    const adjust = position === threshold ? 2 : 1;
 
-    const attack = position <= threshold ? position * 2 - 1 : position;
+    let attack = position;
+    if (position <= threshold) {
+      attack = position * 2 - 1;
+    } else if (position === ceil) {
+      attack = position * 2 - 2;
+    }
 
     if (position > total) {
       result.textContent = "";
