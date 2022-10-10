@@ -1,35 +1,9 @@
-<style>
-  body {
-    font-size: 5rem;
-    font-family: sans-serif;
-  }
-
-  input {
-    margin-left: 1rem;
-    font-size: 5rem;
-    width: 100%;
-  }
-
-  .container {
-    display: flex;
-    margin-bottom: 5rem;
-  }
-</style>
-
-<div class="container">
-  <span>Puesto:</span>
-  <input
-    autofocus
-    onkeydown="handleKeyDown(event)"
-    oninput="handleInput(this)"
-  />
-</div>
-<span id="result"></span>
-
 <script>
   const total = parseInt(window.location.search.slice(1));
   const threshold = total / 2;
-  const result = document.querySelector("#result");
+
+  const result = document.createElement("span");
+  result.className = "result";
 
   function handleKeyDown(event) {
     if (event.key !== "Backspace" && Number.isNaN(parseInt(event.key))) {
@@ -49,5 +23,59 @@
     } else {
       result.textContent = value && `Ataca al ${attack} y al ${attack + 1}`;
     }
+
+    if (!result.textContent && result.isConnected) {
+      document.body.removeChild(result);
+    }
+
+    if (result.textContent && !result.isConnected) {
+      document.body.appendChild(result);
+    }
   }
 </script>
+
+<style>
+  body {
+    font-size: 5rem;
+    font-family: sans-serif;
+    background-color: black;
+    color: white;
+  }
+
+  input {
+    all: unset;
+    margin-left: 1rem;
+    font-size: 5rem;
+    width: 100%;
+    padding: 0.3rem 1rem;
+    outline: 0.15rem solid #0f0;
+  }
+
+  .container {
+    display: flex;
+    margin-bottom: 5rem;
+  }
+
+  .result {
+    animation: appear 1s ease-in-out;
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+</style>
+
+<div class="container">
+  <span>Puesto:</span>
+  <input
+    autofocus
+    onkeydown="handleKeyDown(event)"
+    oninput="handleInput(this)"
+  />
+</div>
