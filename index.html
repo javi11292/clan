@@ -1,30 +1,55 @@
 <style>
   body {
-    font-size: 5rem;
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    max-width: 70rem;
+    overflow: hidden;
+    padding: 5rem 2rem;
+    font-size: 4rem;
     font-family: sans-serif;
     background-color: black;
     color: white;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   input {
     all: unset;
     margin-left: 1rem;
-    margin-bottom: 1rem;
-    font-size: 5rem;
+    width: 100%;
+    font-size: 4rem;
     padding: 0.3rem 1rem;
-    outline: 0.15rem solid #0f0;
+    outline: 0.15rem solid yellow;
   }
 
   .container {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-    margin-bottom: 4rem;
+    display: flex;
+    margin-bottom: 5rem;
     white-space: nowrap;
   }
 
   .result {
     animation: appear 1s ease-in-out;
+  }
+
+  .info {
+    margin-top: 5rem;
+    font-size: 0.7em;
+  }
+
+  .blink {
+    animation: blink 2s ease-in-out;
+    transform-origin: left;
+  }
+
+  img {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
   }
 
   @keyframes appear {
@@ -36,12 +61,23 @@
       opacity: 1;
     }
   }
+
+  @keyframes blink {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.4);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
 </style>
 
 <div class="container">
-  <span>Tamaño:</span>
-  <input onkeydown="handleKeyDown(event)" oninput="handleInputSize(this)" />
-
   <span>Puesto:</span>
   <input
     autofocus
@@ -50,11 +86,11 @@
   />
 </div>
 
-<script>
-  let total = parseInt(window.location.search.slice(1));
-  let position = "";
+<img src="barbarian.png" />
 
-  document.querySelector("input").value = total || "";
+<script>
+  const total = parseInt(window.location.search.slice(1));
+  let position = "";
 
   const result = document.createElement("span");
   result.className = "result";
@@ -63,11 +99,6 @@
     if (event.key !== "Backspace" && Number.isNaN(parseInt(event.key))) {
       event.preventDefault();
     }
-  }
-
-  function handleInputSize(target) {
-    total = parseInt(target.value);
-    printPosition();
   }
 
   function handleInputPosition(target) {
@@ -89,14 +120,20 @@
 
     const when = `durante las 12 ${
       position > ceil ? "primeras" : "últimas"
-    } horas`;
+    } horas.`;
+
+    const info = `<div class="info">Si tu objetivo tiene las 3 estrellas, ataca a uno incompleto ya atacado de más abajo para completar.</div>`;
 
     if (!position || !total || total < 2 || position > total) {
       result.textContent = "";
     } else if (position === total) {
-      result.textContent = `Ataca al ${attack - 1} y al ${attack} ${when}`;
+      result.innerHTML = `<div class="blink">Ataca al ${
+        attack - 1
+      } y al ${attack}</div> ${when}${info}`;
     } else {
-      result.textContent = `Ataca al ${attack} y al ${attack + 1} ${when}`;
+      result.innerHTML = `<div class="blink">Ataca al ${attack} y al ${
+        attack + 1
+      }</div> ${when}${info}`;
     }
 
     if (!result.textContent && result.isConnected) {
