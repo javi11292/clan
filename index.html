@@ -87,12 +87,16 @@
       attack = position * 2 - 2;
     }
 
+    const when = `durante las 12 ${
+      position > ceil ? "primeras" : "últimas"
+    } horas`;
+
     if (!position || !total || total < 2 || position > total) {
       result.textContent = "";
     } else if (position === total) {
-      result.textContent = `Ataca al ${attack - 1} y al ${attack}`;
+      result.textContent = `Ataca al ${attack - 1} y al ${attack} ${when}`;
     } else {
-      result.textContent = `Ataca al ${attack} y al ${attack + 1}`;
+      result.textContent = `Ataca al ${attack} y al ${attack + 1} ${when}`;
     }
 
     if (!result.textContent && result.isConnected) {
