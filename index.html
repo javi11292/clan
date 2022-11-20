@@ -19,13 +19,19 @@
     transform: translateX(-50%);
   }
 
-  input {
+  option {
+    color: black;
+    font-size: 2rem;
+  }
+
+  .input {
     all: unset;
     margin-left: 1rem;
     width: 100%;
     font-size: 4rem;
     padding: 0.3rem 1rem;
-    outline: 0.15rem solid yellow;
+    border: 0.15rem solid yellow;
+    border-radius: 0.5rem;
   }
 
   .container {
@@ -54,6 +60,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
+    z-index: -1;
   }
 
   @keyframes appear {
@@ -82,8 +89,22 @@
 </style>
 
 <div class="container">
+  <span>Tamaño:</span>
+  <select class="input" onchange="handleChangeSize(this)">
+    <option value="10">10 aldeas</option>
+    <option value="15">15 aldeas</option>
+    <option value="20">20 aldeas</option>
+    <option value="25">25 aldeas</option>
+    <option value="30">30 aldeas</option>
+    <option value="40">40 aldeas</option>
+    <option value="50">50 aldeas</option>
+  </select>
+</div>
+
+<div class="container">
   <span>Puesto:</span>
   <input
+    class="input"
     autofocus
     onkeydown="handleKeyDown(event)"
     oninput="handleInputPosition(this)"
@@ -93,7 +114,7 @@
 <img src="barbarian.png" />
 
 <script>
-  const total = parseInt(window.location.search.slice(1));
+  let size = 10;
   let position = "";
 
   const result = document.createElement("span");
@@ -105,13 +126,18 @@
     }
   }
 
+  function handleChangeSize(target) {
+    size = parseInt(target.value);
+    printPosition();
+  }
+
   function handleInputPosition(target) {
     position = parseInt(target.value);
     printPosition();
   }
 
   function printPosition() {
-    const threshold = total / 2;
+    const threshold = size / 2;
     const ceil = Math.ceil(threshold);
     const adjust = position === threshold ? 2 : 1;
 
@@ -128,9 +154,9 @@
 
     const info = `<div class="info">Si tu objetivo tiene las 3 estrellas, ataca a uno incompleto ya atacado de más abajo para completar.</div>`;
 
-    if (!position || !total || total < 2 || position > total) {
+    if (!position || !size || size < 2 || position > size) {
       result.textContent = "";
-    } else if (position === total) {
+    } else if (position === size) {
       result.innerHTML = `<div class="blink">Ataca al ${
         attack - 1
       } y al ${attack}</div> ${when}${info}`;
